@@ -7,11 +7,14 @@ import android.view.MenuItem;
 
 
 public class MainActivity extends ActionBarActivity {
+    BoardView boardView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        boardView = (BoardView)findViewById(R.id.board);
     }
 
 

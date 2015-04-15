@@ -25,11 +25,24 @@ public class Logic {
         }
         p1Turn = true;
     }
+
+    public void changeTurn(){
+        p1Turn = (!p1Turn);
+    }
+    //returns true if clicks empty cell
+    public boolean isValidMove(int row, int col){
+        if( board[row][col] == GamePiece.BLANK) return true;
+        return false;
+    }
+    //marks cell based on players turn
+    public void markCell(int row, int col){
+        if(p1Turn) board[row][col] = GamePiece.RED;
+        else board[row][col] = GamePiece.BLACK;
+    }
+
+    //getters and setters
     public GamePiece getVal(int row, int col){
         return board[row][col];
-    }
-    public void markCell(int row, int col, GamePiece piece){
-        board[row][col] = piece;
     }
     public int getBoardRows(){
         return this.rows;

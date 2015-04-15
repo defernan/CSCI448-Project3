@@ -80,13 +80,13 @@ public class BoardView extends View {
 
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < columns; col++) {
-                drawSquare(col, row, logic.getVal(row, col));
+                drawSquare(row, col, logic.getVal(row, col));
             }
         }
     }
 
     //Draws square based on if piece has been played or not
-    public void drawSquare(int x, int y, GamePiece identity) {
+    public void drawSquare(int y, int x, GamePiece identity) {
         //draw squares
         paint.setColor(Color.BLACK);
         paint.setStyle(Paint.Style.STROKE);
@@ -118,68 +118,76 @@ public class BoardView extends View {
     //=======================================================================
     //Checks to see if a player touches a valid square and handles the touch
     //=======================================================================
-    /*
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if ((event.getAction() == MotionEvent.ACTION_DOWN) ){//&& !winner) {
+            //get touch position
             int x = (int) event.getX();
             int y = (int) event.getY();
-        /*
-        if ((x < boardWidth) && (y < boardWidth)) {
-            if (logic.markCell(x / cellDim, y / cellDim, p1turn)) {
-                turn += 1;
-                if (!(winner = logic.checkForWinner(x / cellDim, y / cellDim, 0)) && (compPlayer)) {
-                    logic.computerNextMove(x / cellDim, y / cellDim);
-                    winner = logic.checkForWinner(logic.getCompLastX(), logic.getCompLastY(), 0);
-                    turn += 1;
-                }
-                else {
-                    p1turn = !p1turn;
-                }
 
-                //TextView playerString = (TextView) findViewById(R.id.player);
-                //if (p1turn) {
-                //   playerString.setText("Player 1");
-                //}
-                //else {
-                //   playerString.setText("Player 2");
-                //}
-
-                if ((turn == 9) && (logic.getWinType() == WinType.DRAW)) {
-                    winType = WinType.DRAW;
-                }
-                else {
-                    winType = logic.getWinType();
-                }
-
-                if (winner) {
-                    numGames += 1;
-                    switch(logic.getMark()){
-                        case X:
-                            player1Wins += 1;
-                            break;
-                        case O:
-                            if (compPlayer) {
-                                compWins += 1;
-                            }
-                            else {
-                                player2Wins += 1;
-                            }
-                            break;
-                        default:
-                            break;
+            //translate to row and column
+            int row = y/cellDim;
+            int col = x/cellDim;
+            //check for out of bounds push
+            if ((row < rows) && (col < columns)) {
+                //check if empty square
+                if (logic.isValidMove(row, col)) {
+                    logic.markCell(row, col);
+                    logic.changeTurn();
+                    /*
+                    if (!(winner = logic.checkForWinner(x / cellDim, y / cellDim, 0)) && (compPlayer)) {
+                        logic.computerNextMove(x / cellDim, y / cellDim);
+                        winner = logic.checkForWinner(logic.getCompLastX(), logic.getCompLastY(), 0);
+                        turn += 1;
                     }
+                    else {
+                        p1turn = !p1turn;
+                    }
+
+                    //TextView playerString = (TextView) findViewById(R.id.player);
+                    //if (p1turn) {
+                    //   playerString.setText("Player 1");
+                    //}
+                    //else {
+                    //   playerString.setText("Player 2");
+                    //}
+
+                    if ((turn == 9) && (logic.getWinType() == WinType.DRAW)) {
+                        winType = WinType.DRAW;
+                    }
+                    else {
+                        winType = logic.getWinType();
+                    }
+
+                    if (winner) {
+                        numGames += 1;
+                        switch(logic.getMark()){
+                            case X:
+                                player1Wins += 1;
+                                break;
+                            case O:
+                                if (compPlayer) {
+                                    compWins += 1;
+                                }
+                                else {
+                                    player2Wins += 1;
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    */
+                    invalidate();
+
+                    return true;
                 }
-
-                invalidate();
-
-                return true;
             }
-        }
 
 
         }
 
         return false;
-    }*/
+    }
 }

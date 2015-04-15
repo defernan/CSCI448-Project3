@@ -5,33 +5,37 @@ package csci448.connectfour;
  */
 public class Logic {
     //private Board board[][]
-    //private int rows;
-    //private int columns;
+    private int rows;
+    private int columns;
     //board
-    private Board board;
+    private GamePiece board[][];
     //turn tracker
     private boolean p1Turn;
     public Logic(){
-        this.board = new Board();
+        this.rows = 6;
+        this.columns = 7;
+        this.board = new GamePiece [rows][columns];
         initializeGame();
     }
 
     public void initializeGame(){
-        for(int row = 0; row < board.getRows(); row++){
-            for(int col = 0; col < board.getColumns(); col++)
-                board.markCell(row, col, GamePiece.BLANK);
+        for(int row = 0; row < rows; row++){
+            for(int col = 0; col < columns; col++)
+                board[row][col]=GamePiece.BLANK;
         }
         p1Turn = true;
     }
     public GamePiece getVal(int row, int col){
-        return board.getCellVal(row, col);
+        return board[row][col];
     }
-
+    public void markCell(int row, int col, GamePiece piece){
+        board[row][col] = piece;
+    }
     public int getBoardRows(){
-        return board.getRows();
+        return this.rows;
     }
     public int getBoardColumns(){
-        return board.getColumns();
+        return this.columns;
     }
 
 }

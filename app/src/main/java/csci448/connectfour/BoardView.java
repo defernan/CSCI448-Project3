@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
 /**
@@ -16,44 +17,53 @@ public class BoardView extends View {
     private Canvas canvas;
     private int boardWidth;
     private int cellDim;
+    //game logic
+    private Logic logic;
     //board dims
-    private int columns = 7;
-    private int rows = 6;
+    private int columns;
+    private int rows;
 
     public BoardView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs);
         cont = context;
+        this.logic = new Logic();
+        this.columns = logic.getBoardColumns();
+        this.rows = logic.getBoardRows();
         this.setBackgroundColor(Color.YELLOW);
     }
 
     public BoardView(Context context, AttributeSet attrs) {
         super(context, attrs);
         cont = context;
+        this.logic = new Logic();
+        this.columns = logic.getBoardColumns();
+        this.rows = logic.getBoardRows();
         this.setBackgroundColor(Color.YELLOW);
     }
 
     public BoardView(Context context) {
         super(context);
         cont = context;
+        this.logic = new Logic();
+        this.columns = logic.getBoardColumns();
+        this.rows = logic.getBoardRows();
         this.setBackgroundColor(Color.YELLOW);
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        int squareSize = getMeasuredWidth()*rows/columns;
+        int squareSize = getMeasuredWidth() * rows / columns;
         setMeasuredDimension(getMeasuredWidth(), squareSize);
     }
 
     @Override
-    public void onDraw(Canvas c){
+    public void onDraw(Canvas c) {
         this.canvas = c;
-        //use 6 for 6 columns
         if (canvas.getWidth() < canvas.getHeight()) {
             this.cellDim = canvas.getWidth() / columns;
             this.boardWidth = canvas.getWidth();
-        }
-        else {
+        } else {
             this.cellDim = canvas.getHeight() / columns;
             this.boardWidth = canvas.getHeight();
         }
@@ -62,28 +72,29 @@ public class BoardView extends View {
         drawBoard();
 
     }
+
     //Draws board
-    public void drawBoard(){
+    public void drawBoard() {
         //playing = true;
         //listenerActivation();
 
-        for (int i=0; i < columns; i++){
-            for (int j=0; j < rows; j++) {
-                //LATER WILL BE OUR 2D ARRAY OF THE GAME PIECE VALUE
-                drawSquare(i, j, GamePiece.BLANK);
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < columns; col++) {
+                drawSquare(col, row, logic.getVal(row, col));
             }
         }
     }
+
     //Draws square based on if piece has been played or not
-    public void drawSquare(int x, int y, GamePiece identity){
+    public void drawSquare(int x, int y, GamePiece identity) {
         //draw squares
         paint.setColor(Color.BLACK);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(2);
-        canvas.drawRect(x*cellDim, y*cellDim, (x+1)*cellDim, (y+1)*cellDim, paint);
+        canvas.drawRect(x * cellDim, y * cellDim, (x + 1) * cellDim, (y + 1) * cellDim, paint);
 
         //draw pieces
-        switch(identity){
+        switch (identity) {
             case BLANK:
                 paint.setColor(Color.CYAN);
                 break;
@@ -98,10 +109,77 @@ public class BoardView extends View {
                 break;
         }
         paint.setStyle(Paint.Style.FILL);
-        canvas.drawCircle(x*cellDim + cellDim/2, y*cellDim + cellDim/2, cellDim/2 - 4, paint);
+        canvas.drawCircle(x * cellDim + cellDim / 2, y * cellDim + cellDim / 2, cellDim / 2 - 4, paint);
 
 
     }
+
+
+    //=======================================================================
+    //Checks to see if a player touches a valid square and handles the touch
+    //=======================================================================
+    /*
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if ((event.getAction() == MotionEvent.ACTION_DOWN) ){//&& !winner) {
+            int x = (int) event.getX();
+            int y = (int) event.getY();
+        /*
+        if ((x < boardWidth) && (y < boardWidth)) {
+            if (logic.markCell(x / cellDim, y / cellDim, p1turn)) {
+                turn += 1;
+                if (!(winner = logic.checkForWinner(x / cellDim, y / cellDim, 0)) && (compPlayer)) {
+                    logic.computerNextMove(x / cellDim, y / cellDim);
+                    winner = logic.checkForWinner(logic.getCompLastX(), logic.getCompLastY(), 0);
+                    turn += 1;
+                }
+                else {
+                    p1turn = !p1turn;
+                }
+
+                //TextView playerString = (TextView) findViewById(R.id.player);
+                //if (p1turn) {
+                //   playerString.setText("Player 1");
+                //}
+                //else {
+                //   playerString.setText("Player 2");
+                //}
+
+                if ((turn == 9) && (logic.getWinType() == WinType.DRAW)) {
+                    winType = WinType.DRAW;
+                }
+                else {
+                    winType = logic.getWinType();
+                }
+
+                if (winner) {
+                    numGames += 1;
+                    switch(logic.getMark()){
+                        case X:
+                            player1Wins += 1;
+                            break;
+                        case O:
+                            if (compPlayer) {
+                                compWins += 1;
+                            }
+                            else {
+                                player2Wins += 1;
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                invalidate();
+
+                return true;
+            }
+        }
+
+
+        }
+
+        return false;
+    }*/
 }
-
-

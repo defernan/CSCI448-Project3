@@ -138,7 +138,6 @@ public class BoardView extends View {
                 //check if empty square
                 if (logic.isValidMove(col)) {
                     logic.markCell(col);
-                    logic.changeTurn();
                     /*
                     if (!(winner = logic.checkForWinner(x / cellDim, y / cellDim, 0)) && (compPlayer)) {
                         logic.computerNextMove(x / cellDim, y / cellDim);
@@ -183,6 +182,7 @@ public class BoardView extends View {
                         }
                     }
                     */
+                    logic.changeTurn();
                     invalidate();
 
                     return true;

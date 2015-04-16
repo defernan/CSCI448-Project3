@@ -80,7 +80,9 @@ public class BoardView extends View {
 
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < columns; col++) {
-                drawSquare(row, col, logic.getVal(row, col));
+                //do this to adjust for board drawn from top down
+                int adjustedRow = rows - 1 - row;
+                drawSquare(adjustedRow, col, logic.getVal(row, col));
             }
         }
     }
@@ -128,12 +130,14 @@ public class BoardView extends View {
 
             //translate to row and column
             int row = y/cellDim;
+            //use this to adjust for board going from top(0) down(max)
+            int adjustedRow = rows - 1 - row;
             int col = x/cellDim;
             //check for out of bounds push
             if ((row < rows) && (col < columns)) {
                 //check if empty square
-                if (logic.isValidMove(row, col)) {
-                    logic.markCell(row, col);
+                if (logic.isValidMove(col)) {
+                    logic.markCell(col);
                     logic.changeTurn();
                     /*
                     if (!(winner = logic.checkForWinner(x / cellDim, y / cellDim, 0)) && (compPlayer)) {

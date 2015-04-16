@@ -29,20 +29,29 @@ public class Logic {
     public void changeTurn(){
         p1Turn = (!p1Turn);
     }
-    //returns true if clicks empty cell
-    public boolean isValidMove(int row, int col){
-        if( board[row][col] == GamePiece.BLANK) return true;
+    //returns true if column not full
+    public boolean isValidMove(int col){
+        int maxPos = rows-1;
+        if( board[maxPos][col] == GamePiece.BLANK) return true;
         return false;
     }
     //marks cell based on players turn
-    public void markCell(int row, int col){
-        if(p1Turn) board[row][col] = GamePiece.RED;
-        else board[row][col] = GamePiece.BLACK;
+    public void markCell(int col){
+        for(int row = 0; row < rows; row++){
+            if(board[row][col] == GamePiece.BLANK){
+                board[row][col] = playerPiece();
+                return;
+            }
+        }
     }
 
     //getters and setters
     public GamePiece getVal(int row, int col){
         return board[row][col];
+    }
+    public GamePiece playerPiece(){
+        if(p1Turn) return GamePiece.RED;
+        else return GamePiece.BLACK;
     }
     public int getBoardRows(){
         return this.rows;

@@ -24,6 +24,8 @@ public class BoardView extends View {
     private int rows;
 
     private boolean winner;
+    //used for drawing a line through the winning set
+    private WinType winType = WinType.NONE;
 
     public BoardView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs);
@@ -59,6 +61,9 @@ public class BoardView extends View {
         setMeasuredDimension(getMeasuredWidth(), squareSize);
     }
 
+    /*=======================================================================
+    = Draw logic
+    ==========================================================================*/
     @Override
     public void onDraw(Canvas c) {
         this.canvas = c;
@@ -70,8 +75,11 @@ public class BoardView extends View {
             this.boardWidth = canvas.getHeight();
         }
 
-        //Initialize board
+        //draw board
         drawBoard();
+
+        //draws win if there is one
+        drawWin();
 
     }
 
@@ -116,6 +124,41 @@ public class BoardView extends View {
         canvas.drawCircle(x * cellDim + cellDim / 2, y * cellDim + cellDim / 2, cellDim / 2 - 4, paint);
 
 
+    }
+    public void drawWin(){
+        /*
+        switch(winType) {
+            case HORIZONTAL:
+                paint.setColor(Color.GREEN);
+                winOffsetY = logic.getWinOffsetY();
+                canvas.drawLine(0, winOffsetY * cellDim + cellDim / 2, boardWidth, winOffsetY * cellDim + cellDim / 2, paint);
+                break;
+
+            case VERTICAL:
+                paint.setColor(Color.GREEN);
+                winOffsetX = logic.getWinOffsetX();
+                canvas.drawLine(winOffsetX * cellDim + cellDim / 2, 0, winOffsetX * cellDim + cellDim / 2, boardWidth, paint);
+                break;
+
+            case DIAGONALDOWN:
+                paint.setColor(Color.GREEN);
+                canvas.drawLine(0, 0, boardWidth, boardWidth, paint);
+                break;
+
+            case DIAGONALUP:
+                paint.setColor(Color.GREEN);
+                canvas.drawLine(0, boardWidth, boardWidth, 0, paint);
+                break;
+
+            case DRAW:
+                draws += 1;
+                numGames += 1;
+                break;
+
+            default:
+                break;
+        }
+        */
     }
 
 

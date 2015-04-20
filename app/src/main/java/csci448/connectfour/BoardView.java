@@ -23,6 +23,8 @@ public class BoardView extends View {
     private int columns;
     private int rows;
 
+    private boolean winner;
+
     public BoardView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs);
         cont = context;
@@ -123,7 +125,7 @@ public class BoardView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if ((event.getAction() == MotionEvent.ACTION_DOWN) ){//&& !winner) {
+        if ((event.getAction() == MotionEvent.ACTION_DOWN) && !winner) {
             //get touch position
             int x = (int) event.getX();
             int y = (int) event.getY();
@@ -138,15 +140,15 @@ public class BoardView extends View {
                 //check if empty square
                 if (logic.isValidMove(col)) {
                     logic.markCell(col);
+
+                    winner = logic.checkForWinner(adjustedRow, col);
                     /*
-                    if (!(winner = logic.checkForWinner(x / cellDim, y / cellDim, 0)) && (compPlayer)) {
+                    if (!(winner) && (compPlayer)) {
                         logic.computerNextMove(x / cellDim, y / cellDim);
                         winner = logic.checkForWinner(logic.getCompLastX(), logic.getCompLastY(), 0);
                         turn += 1;
                     }
-                    else {
-                        p1turn = !p1turn;
-                    }
+
 
                     //TextView playerString = (TextView) findViewById(R.id.player);
                     //if (p1turn) {
@@ -182,6 +184,7 @@ public class BoardView extends View {
                         }
                     }
                     */
+
                     logic.changeTurn();
                     invalidate();
 

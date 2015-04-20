@@ -45,7 +45,7 @@ public class Logic {
         }
     }
     //win logic
-    public boolean checkForWinner(int row, int col, int count) {
+    public boolean checkForWinner(int row, int col) {
         int win = 4;
         int horizontal = 1 + checkLeft(row, col - 1) + checkRight(row, col + 1);
         int vertical = 1 + checkUp(row + 1, col) + checkDown(row - 1, col);

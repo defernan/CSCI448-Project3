@@ -48,4 +48,9 @@ public class MainActivity extends ActionBarActivity {
     public void newClicked(View view) {
         boardView.newGame();
     }
+
+    public void exitClicked(View view) {
+        finish();
+        System.exit(0);//closes app
+    }
 }

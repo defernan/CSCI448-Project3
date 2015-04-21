@@ -4,10 +4,14 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 
 public class MainActivity extends ActionBarActivity {
     BoardView boardView;
+    Button newGame;
+    Button exitGame;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,6 +19,8 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         boardView = (BoardView)findViewById(R.id.board);
+        newGame = (Button) findViewById(R.id.buttonNewGame);
+        exitGame = (Button) findViewById(R.id.buttonExitGame);
     }
 
 
@@ -38,5 +44,8 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    public void newClicked(View view) {
+        boardView.newGame();
     }
 }

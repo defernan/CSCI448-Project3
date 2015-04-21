@@ -240,4 +240,9 @@ public class BoardView extends View {
 
         return false;
     }
+    public void newGame(){
+        logic.initializeGame();
+        this.winner = false;
+        invalidate();
+    }
 }

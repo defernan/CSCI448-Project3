@@ -1,5 +1,9 @@
 package csci448.connectfour;
 
+import android.util.Pair;
+
+import java.util.ArrayList;
+
 /**
  * Created by Dezmon on 4/15/15.
  */
@@ -11,6 +15,8 @@ public class Logic {
     private GamePiece board[][];
     //turn tracker
     private boolean p1Turn;
+    //for drawing win line
+    //private ArrayList<Pair> winningPieces;
     public Logic(){
         this.rows = 6;
         this.columns = 7;

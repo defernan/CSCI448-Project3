@@ -184,7 +184,7 @@ public class BoardView extends View {
                 if (logic.isValidMove(col)) {
                     logic.markCell(col);
 
-                    winner = logic.checkForWinner(adjustedRow, col);
+                    winner = logic.checkForWinner(col);
                     /*
                     if (!(winner) && (compPlayer)) {
                         logic.computerNextMove(x / cellDim, y / cellDim);

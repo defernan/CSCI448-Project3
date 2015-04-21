@@ -11,6 +11,8 @@ public class Logic {
     //private Board board[][]
     private int rows;
     private int columns;
+    //keeps track of last row where piece was placed
+    private int lastRow;
     //board
     private GamePiece board[][];
     //turn tracker
@@ -46,17 +48,18 @@ public class Logic {
         for(int row = 0; row < rows; row++){
             if(board[row][col] == GamePiece.BLANK){
                 board[row][col] = playerPiece();
+                this.lastRow = row;
                 return;
             }
         }
     }
     //win logic
-    public boolean checkForWinner(int row, int col) {
+    public boolean checkForWinner(int col) {
         int win = 4;
-        int horizontal = 1 + checkLeft(row, col - 1) + checkRight(row, col + 1);
-        int vertical = 1 + checkUp(row + 1, col) + checkDown(row - 1, col);
-        int diag1 = 1 + checkDownLeft(row - 1, col - 1) + checkUpRight(row + 1, row + 1);
-        int diag2 = 1 + checkDownRight(row - 1, col + 1) + checkUpLeft(row + 1, col - 1);
+        int horizontal = 1 + checkLeft(lastRow, col - 1) + checkRight(lastRow, col + 1);
+        int vertical = 1 + checkUp(lastRow + 1, col) + checkDown(lastRow - 1, col);
+        int diag1 = 1 + checkDownLeft(lastRow - 1, col - 1) + checkUpRight(lastRow + 1, lastRow + 1);
+        int diag2 = 1 + checkDownRight(lastRow - 1, col + 1) + checkUpLeft(lastRow + 1, col - 1);
 
         if (horizontal == win) {
             //winType = WinType.HORIZONTAL;

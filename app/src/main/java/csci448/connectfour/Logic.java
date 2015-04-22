@@ -47,7 +47,6 @@ public class Logic {
             if(board[row][col] == GamePiece.BLANK){
                 board[row][col] = playerPiece();
                 this.lastRow = row;
-                System.out.println(col + ", " + lastRow);
                 return;
             }
         }
@@ -58,25 +57,25 @@ public class Logic {
         int winCount = 4;
         int horizontal = 1 + checkLeft(lastRow, col - 1) + checkRight(lastRow, col + 1);
         int vertical = 1 + checkUp(lastRow + 1, col) + checkDown(lastRow - 1, col);
-        int diag1 = 1 + checkDownLeft(lastRow - 1, col - 1) + checkUpRight(lastRow + 1, lastRow + 1);
+        int diag1 = 1 + checkDownLeft(lastRow - 1, col - 1) + checkUpRight(lastRow + 1, col + 1);
         int diag2 = 1 + checkDownRight(lastRow - 1, col + 1) + checkUpLeft(lastRow + 1, col - 1);
 
-        if (horizontal == winCount) {
+        if (horizontal >= winCount) {
             markWinHorizontalL(lastRow, col - 1);
             markWinHorizontalR(lastRow, col + 1);
             win = true;
         }
-        if (vertical == winCount) {
+        if (vertical >= winCount) {
             markWinVertUp(lastRow + 1, col);
             markWinVertDown(lastRow - 1, col);
             win = true;
         }
-        if (diag1 == winCount) {
+        if (diag1 >= winCount) {
             markWinDownLeft(lastRow - 1, col - 1);
             markWinUpRight(lastRow + 1, col + 1);
             win = true;
         }
-        if (diag2 == winCount) {
+        if (diag2 >= winCount) {
             markWinDownRight(lastRow - 1, col + 1);
             markWinUpLeft(lastRow + 1, col - 1);
             win = true;

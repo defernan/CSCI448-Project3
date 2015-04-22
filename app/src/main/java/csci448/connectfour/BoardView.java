@@ -60,6 +60,7 @@ public class BoardView extends View {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         int squareSize = getMeasuredWidth() * rows / columns;
         setMeasuredDimension(getMeasuredWidth(), squareSize);
+
     }
 
     /*=======================================================================
@@ -139,7 +140,7 @@ public class BoardView extends View {
             path.addCircle(columns / 2 * cellDim + 30, rows / 2 * cellDim + 100, 2 *  cellDim, Path.Direction.CW);
             //modify paint
             paint.setColor(Color.BLUE);
-            paint.setTextSize(52);
+            paint.setTextSize(cellDim/2);
             paint.setFakeBoldText(true);
             //not sure why this is flipped, seems like invalidate is not finishing false enough
             if(logic.isP1Turn()) {
@@ -147,8 +148,10 @@ public class BoardView extends View {
             }else{
                 player = "Player1";
             }
-            canvas.drawTextOnPath(player+won, path, 494, 0, paint);
-            //canvas.drawText((player+won),columns/3*cellDim,rows/2*cellDim,paint);
+            //curved cool win, works on android dimensions off on nexus
+            //canvas.drawTextOnPath(player+won, path, 494, 0, paint);
+            //horizontal
+            canvas.drawText((player+won),columns/3*cellDim,rows/2*cellDim,paint);
         }
     }
 

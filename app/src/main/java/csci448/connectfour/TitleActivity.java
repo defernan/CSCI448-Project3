@@ -9,26 +9,21 @@ import android.view.View;
 import android.widget.Button;
 
 
-public class MainActivity extends ActionBarActivity {
-    BoardView boardView;
-    Button newGame;
+public class TitleActivity extends ActionBarActivity {
+    Button twoPlayerGame;
     Button exitGame;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        boardView = (BoardView)findViewById(R.id.board);
-        newGame = (Button) findViewById(R.id.buttonNewGame);
-        exitGame = (Button) findViewById(R.id.buttonExitGame);
+        setContentView(R.layout.activity_title);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_title, menu);
         return true;
     }
 
@@ -46,13 +41,13 @@ public class MainActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
-    public void newClicked(View view) {
-        boardView.newGame();
+
+    public void twoPlayerClicked(View view) {
+        startActivity(new Intent(TitleActivity.this, MainActivity.class));
     }
 
     public void exitClicked(View view) {
-//        finish();
-//        System.exit(0);//closes app
-        startActivity(new Intent(MainActivity.this, TitleActivity.class));
+        finish();
+        System.exit(0);//closes app
     }
 }

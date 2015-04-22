@@ -1,5 +1,8 @@
 package csci448.connectfour;
 
+import android.util.Log;
+import android.widget.TextView;
+
 /**
  * Created by Dezmon on 4/15/15.
  */
@@ -13,7 +16,6 @@ public class Logic {
     private GamePiece board[][];
     //turn tracker
     private boolean p1Turn;
-    //for drawing win line
     //private ArrayList<Pair> winningPieces;
     public Logic(){
         this.rows = 6;
@@ -45,6 +47,7 @@ public class Logic {
             if(board[row][col] == GamePiece.BLANK){
                 board[row][col] = playerPiece();
                 this.lastRow = row;
+                System.out.println(col + ", " + lastRow);
                 return;
             }
         }
@@ -284,6 +287,9 @@ public class Logic {
     public GamePiece playerPiece(){
         if(p1Turn) return GamePiece.RED;
         else return GamePiece.BLACK;
+    }
+    public boolean isP1Turn(){
+        return this.p1Turn;
     }
     public int getBoardRows(){
         return this.rows;

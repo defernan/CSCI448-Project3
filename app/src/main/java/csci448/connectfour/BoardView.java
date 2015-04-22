@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -129,39 +130,26 @@ public class BoardView extends View {
 
     }
     public void drawWin(){
-        /*
-        switch(winType) {
-            case HORIZONTAL:
-                paint.setColor(Color.GREEN);
-                winOffsetY = logic.getWinOffsetY();
-                canvas.drawLine(0, winOffsetY * cellDim + cellDim / 2, boardWidth, winOffsetY * cellDim + cellDim / 2, paint);
-                break;
-
-            case VERTICAL:
-                paint.setColor(Color.GREEN);
-                winOffsetX = logic.getWinOffsetX();
-                canvas.drawLine(winOffsetX * cellDim + cellDim / 2, 0, winOffsetX * cellDim + cellDim / 2, boardWidth, paint);
-                break;
-
-            case DIAGONALDOWN:
-                paint.setColor(Color.GREEN);
-                canvas.drawLine(0, 0, boardWidth, boardWidth, paint);
-                break;
-
-            case DIAGONALUP:
-                paint.setColor(Color.GREEN);
-                canvas.drawLine(0, boardWidth, boardWidth, 0, paint);
-                break;
-
-            case DRAW:
-                draws += 1;
-                numGames += 1;
-                break;
-
-            default:
-                break;
+        if(this.winner){
+            //make string
+            String player;
+            String won = " Won";
+            //make path to draw along
+            Path path = new Path();
+            path.addCircle(columns / 2 * cellDim + 30, rows / 2 * cellDim + 100, 2 *  cellDim, Path.Direction.CW);
+            //modify paint
+            paint.setColor(Color.BLUE);
+            paint.setTextSize(52);
+            paint.setFakeBoldText(true);
+            //not sure why this is flipped, seems like invalidate is not finishing false enough
+            if(logic.isP1Turn()) {
+                player= "Player2";
+            }else{
+                player = "Player1";
+            }
+            canvas.drawTextOnPath(player+won, path, 494, 0, paint);
+            //canvas.drawText((player+won),columns/3*cellDim,rows/2*cellDim,paint);
         }
-        */
     }
 
 
@@ -230,10 +218,8 @@ public class BoardView extends View {
                         }
                     }
                     */
-
-                    logic.changeTurn();
                     invalidate();
-
+                    logic.changeTurn();
                     return true;
                 }
             }

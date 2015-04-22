@@ -1,9 +1,5 @@
 package csci448.connectfour;
 
-import android.util.Pair;
-
-import java.util.ArrayList;
-
 /**
  * Created by Dezmon on 4/15/15.
  */
@@ -55,32 +51,38 @@ public class Logic {
     }
     //win logic
     public boolean checkForWinner(int col) {
-        int win = 4;
+        boolean win = false;
+        int winCount = 4;
         int horizontal = 1 + checkLeft(lastRow, col - 1) + checkRight(lastRow, col + 1);
         int vertical = 1 + checkUp(lastRow + 1, col) + checkDown(lastRow - 1, col);
         int diag1 = 1 + checkDownLeft(lastRow - 1, col - 1) + checkUpRight(lastRow + 1, lastRow + 1);
         int diag2 = 1 + checkDownRight(lastRow - 1, col + 1) + checkUpLeft(lastRow + 1, col - 1);
 
-        if (horizontal == win) {
-            //winType = WinType.HORIZONTAL;
-            //winOffsetY = y;
-            return true;
+        if (horizontal == winCount) {
+            markWinHorizontalL(lastRow, col - 1);
+            markWinHorizontalR(lastRow, col + 1);
+            win = true;
         }
-        if (vertical == win) {
-            //winType = WinType.VERTICAL;
-            //winOffsetX = x;
-            return true;
+        if (vertical == winCount) {
+            markWinVertUp(lastRow + 1, col);
+            markWinVertDown(lastRow - 1, col);
+            win = true;
         }
-        if (diag1 == win) {
-            //winType = WinType.DIAGONALUP;
-            return true;
+        if (diag1 == winCount) {
+            markWinDownLeft(lastRow - 1, col - 1);
+            markWinUpRight(lastRow + 1, col + 1);
+            win = true;
         }
-        if (diag2 == win) {
-            //winType = WinType.DIAGONALDOWN;
-            return true;
+        if (diag2 == winCount) {
+            markWinDownRight(lastRow - 1, col + 1);
+            markWinUpLeft(lastRow + 1, col - 1);
+            win = true;
         }
 
-        return false;
+        if(win){
+            board[lastRow][col] = GamePiece.GREEN;
+        }
+        return win;
     }
 
     int checkLeft(int row, int col) {
@@ -174,6 +176,105 @@ public class Logic {
         }
         else {
             return 1 + checkUpRight(row + 1, col + 1);
+        }
+    }
+    //mark winning pieces
+    public void markWinHorizontalL(int row, int col){
+        if (col < 0) {
+            return;
+        }
+        else if (board[row][col] != playerPiece()) {
+            return;
+        }else{
+            board[row][col] = GamePiece.GREEN;
+            markWinHorizontalL(row, col - 1);
+        }
+    }
+    public void markWinHorizontalR(int row, int col){
+        if (col >= columns) {
+            return;
+        }
+        else if (board[row][col] != playerPiece()) {
+            return;
+        }else{
+            board[row][col] = GamePiece.GREEN;
+            markWinHorizontalR(row, col + 1);
+        }
+    }
+
+    public void markWinVertUp(int row, int col) {
+        if (row >= rows) {
+            return;
+        }
+        else if (board[row][col] != playerPiece()) {
+            return;
+        }
+        else {
+            board[row][col] = GamePiece.GREEN;
+            markWinVertUp(row + 1, col);
+        }
+    }
+
+    public void markWinVertDown(int row, int col) {
+        if (row < 0) {
+            return;
+        }
+        else if (board[row][col] != playerPiece()) {
+            return;
+        }
+        else {
+            board[row][col] = GamePiece.GREEN;
+            markWinVertDown(row - 1, col);
+        }
+    }
+
+    public void markWinDownLeft(int row, int col) {
+        if( row < 0 || col < 0){
+            return;
+        }else if(board[row][col]!=playerPiece()){
+            return;
+        }else{
+            board[row][col] = GamePiece.GREEN;
+            markWinDownLeft(row - 1, col - 1);
+        }
+    }
+
+    public void markWinDownRight(int row, int col) {
+        if ((row < 0) || (col >= columns)) {
+            return;
+        }
+        else if (board[row][col] != playerPiece()) {
+            return;
+        }
+        else {
+            board[row][col] = GamePiece.GREEN;
+            markWinDownRight(row - 1, col + 1);
+        }
+    }
+
+    public void markWinUpLeft(int row, int col) {
+        if ((row >= rows) || (col < 0)) {
+            return;
+        }
+        else if (board[row][col] != playerPiece()) {
+            return;
+        }
+        else {
+            board[row][col] = GamePiece.GREEN;
+            markWinUpLeft(row + 1, col - 1);
+        }
+    }
+
+    public void markWinUpRight(int row, int col) {
+        if ((row >= rows) || (col >= columns)) {
+            return;
+        }
+        else if (board[row][col] != playerPiece()) {
+            return;
+        }
+        else {
+            board[row][col] = GamePiece.GREEN;
+            markWinUpRight(row + 1, col + 1);
         }
     }
     //getters and setters

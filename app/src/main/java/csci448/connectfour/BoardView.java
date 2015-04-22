@@ -116,6 +116,9 @@ public class BoardView extends View {
             case BLACK:
                 paint.setColor(Color.BLACK);
                 break;
+            case GREEN:
+                paint.setColor(Color.GREEN);
+                break;
             default:
                 paint.setColor(Color.CYAN);
                 break;

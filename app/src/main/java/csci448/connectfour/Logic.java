@@ -16,6 +16,8 @@ public class Logic {
     private GamePiece board[][];
     //turn tracker
     private boolean p1Turn;
+    //Gamepiece win tracker
+    GamePiece winPiece;
     //private ArrayList<Pair> winningPieces;
     public Logic(){
         this.rows = 6;
@@ -61,28 +63,48 @@ public class Logic {
         int diag2 = 1 + checkDownRight(lastRow - 1, col + 1) + checkUpLeft(lastRow + 1, col - 1);
 
         if (horizontal >= winCount) {
+            if(p1Turn) {
+                winPiece = GamePiece.RGREEN;
+            }else{
+                winPiece = GamePiece.BGREEN;
+            }
             markWinHorizontalL(lastRow, col - 1);
             markWinHorizontalR(lastRow, col + 1);
             win = true;
         }
         if (vertical >= winCount) {
+            if(p1Turn) {
+                winPiece = GamePiece.RGREEN;
+            }else{
+                winPiece = GamePiece.BGREEN;
+            }
             markWinVertUp(lastRow + 1, col);
             markWinVertDown(lastRow - 1, col);
             win = true;
         }
         if (diag1 >= winCount) {
+            if(p1Turn) {
+                winPiece = GamePiece.RGREEN;
+            }else{
+                winPiece = GamePiece.BGREEN;
+            }
             markWinDownLeft(lastRow - 1, col - 1);
             markWinUpRight(lastRow + 1, col + 1);
             win = true;
         }
         if (diag2 >= winCount) {
+            if(p1Turn) {
+                winPiece = GamePiece.RGREEN;
+            }else{
+                winPiece = GamePiece.BGREEN;
+            }
             markWinDownRight(lastRow - 1, col + 1);
             markWinUpLeft(lastRow + 1, col - 1);
             win = true;
         }
 
         if(win){
-            board[lastRow][col] = GamePiece.GREEN;
+            board[lastRow][col] = winPiece;
         }
         return win;
     }
@@ -188,7 +210,7 @@ public class Logic {
         else if (board[row][col] != playerPiece()) {
             return;
         }else{
-            board[row][col] = GamePiece.GREEN;
+            board[row][col] = winPiece;
             markWinHorizontalL(row, col - 1);
         }
     }
@@ -199,7 +221,7 @@ public class Logic {
         else if (board[row][col] != playerPiece()) {
             return;
         }else{
-            board[row][col] = GamePiece.GREEN;
+            board[row][col] = winPiece;
             markWinHorizontalR(row, col + 1);
         }
     }
@@ -212,7 +234,7 @@ public class Logic {
             return;
         }
         else {
-            board[row][col] = GamePiece.GREEN;
+            board[row][col] = winPiece;
             markWinVertUp(row + 1, col);
         }
     }
@@ -225,7 +247,7 @@ public class Logic {
             return;
         }
         else {
-            board[row][col] = GamePiece.GREEN;
+            board[row][col] = winPiece;
             markWinVertDown(row - 1, col);
         }
     }
@@ -236,7 +258,7 @@ public class Logic {
         }else if(board[row][col]!=playerPiece()){
             return;
         }else{
-            board[row][col] = GamePiece.GREEN;
+            board[row][col] = winPiece;
             markWinDownLeft(row - 1, col - 1);
         }
     }
@@ -249,7 +271,7 @@ public class Logic {
             return;
         }
         else {
-            board[row][col] = GamePiece.GREEN;
+            board[row][col] = winPiece;
             markWinDownRight(row - 1, col + 1);
         }
     }
@@ -262,7 +284,7 @@ public class Logic {
             return;
         }
         else {
-            board[row][col] = GamePiece.GREEN;
+            board[row][col] = winPiece;
             markWinUpLeft(row + 1, col - 1);
         }
     }
@@ -275,7 +297,7 @@ public class Logic {
             return;
         }
         else {
-            board[row][col] = GamePiece.GREEN;
+            board[row][col] = winPiece;
             markWinUpRight(row + 1, col + 1);
         }
     }

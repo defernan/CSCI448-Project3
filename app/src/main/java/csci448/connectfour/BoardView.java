@@ -108,27 +108,40 @@ public class BoardView extends View {
         canvas.drawRect(x * cellDim, y * cellDim, (x + 1) * cellDim, (y + 1) * cellDim, paint);
 
         //draw pieces
+        paint.setStyle(Paint.Style.FILL);
         switch (identity) {
             case BLANK:
                 paint.setColor(Color.CYAN);
+                drawCircle(y, x, cellDim / 2 - 4);
                 break;
             case RED:
                 paint.setColor(Color.RED);
+                drawCircle(y, x, cellDim / 2 - 4);
                 break;
             case BLACK:
                 paint.setColor(Color.BLACK);
+                drawCircle(y, x, cellDim / 2 - 4);
                 break;
-            case GREEN:
-                paint.setColor(Color.rgb(113,198,113));
+            case RGREEN:
+                paint.setColor(Color.RED);
+                drawCircle(y, x, cellDim / 2 - 4);
+                paint.setColor(Color.GREEN);
+                drawCircle(y, x, cellDim / 8);
+                break;
+            case BGREEN:
+                paint.setColor(Color.BLACK);
+                drawCircle(y, x, cellDim / 2 - 4);
+                paint.setColor(Color.GREEN);
+                drawCircle(y, x, cellDim / 8);
                 break;
             default:
                 paint.setColor(Color.CYAN);
+                drawCircle(y, x, cellDim / 2 - 4);
                 break;
         }
-        paint.setStyle(Paint.Style.FILL);
-        canvas.drawCircle(x * cellDim + cellDim / 2, y * cellDim + cellDim / 2, cellDim / 2 - 4, paint);
-
-
+    }
+    public void drawCircle(int y, int x, float radius){
+        canvas.drawCircle(x * cellDim + cellDim / 2, y * cellDim + cellDim / 2, radius, paint);
     }
     public void drawWin(){
         if(this.winner){

@@ -13,6 +13,7 @@ public class MainActivity extends ActionBarActivity {
     BoardView boardView;
     Button newGame;
     Button exitGame;
+    int gameType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +23,8 @@ public class MainActivity extends ActionBarActivity {
         boardView = (BoardView)findViewById(R.id.board);
         newGame = (Button) findViewById(R.id.buttonNewGame);
         exitGame = (Button) findViewById(R.id.buttonExitGame);
+        Bundle b = getIntent().getExtras();
+        gameType = b.getInt("gameType");
     }
 
 

@@ -44,11 +44,21 @@ public class TitleActivity extends ActionBarActivity {
     }
 
     public void singlePlayerClicked(View view){
-        startActivity(new Intent(TitleActivity.this, MainActivity.class));
+//        startActivity(new Intent(TitleActivity.this, MainActivity.class));
+        Intent intent = new Intent(TitleActivity.this, MainActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt("gameType", 1);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     public void twoPlayerClicked(View view) {
-        startActivity(new Intent(TitleActivity.this, MainActivity.class));
+
+        Intent intent = new Intent(TitleActivity.this, MainActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt("gameType", 0);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     public void exitClicked(View view) {

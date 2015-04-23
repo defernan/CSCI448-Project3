@@ -7,11 +7,23 @@
     android:orientation="vertical"
     tools:context="csci448.connectfour.TitleActivity">
 
+    <csci448.connectfour.TitleView
+        android:id="@+id/titleBackground"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"  />
+
+    <Button
+        android:id="@+id/buttonSinglePlayer"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Single Player"
+        android:onClick="singlePlayerClicked"/>
 
     <Button
         android:id="@+id/buttonTwoPlayer"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/buttonSinglePlayer"
         android:text="Two Player"
         android:onClick="twoPlayerClicked"/>
     <Button

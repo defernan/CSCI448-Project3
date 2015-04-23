@@ -10,6 +10,7 @@ import android.widget.Button;
 
 
 public class TitleActivity extends ActionBarActivity {
+    Button singlePlayerGame;
     Button twoPlayerGame;
     Button exitGame;
 
@@ -40,6 +41,10 @@ public class TitleActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void singlePlayerClicked(View view){
+        startActivity(new Intent(TitleActivity.this, MainActivity.class));
     }
 
     public void twoPlayerClicked(View view) {

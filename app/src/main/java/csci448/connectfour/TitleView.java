@@ -30,26 +30,25 @@ public class TitleView extends View {
 
     //resize board factor
     private float factor = .75f;
-    private boolean winner;
-    //used for drawing a line through the winning set
-    private WinType winType = WinType.NONE;
+
+    private int backgroundColor = Color.YELLOW;
 
     public TitleView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs);
         cont = context;
-        this.setBackgroundColor(Color.BLUE);
+        this.setBackgroundColor(backgroundColor);
     }
 
     public TitleView(Context context, AttributeSet attrs) {
         super(context, attrs);
         cont = context;
-        this.setBackgroundColor(Color.BLUE);
+        this.setBackgroundColor(backgroundColor);
     }
 
     public TitleView(Context context) {
         super(context);
         cont = context;
-        this.setBackgroundColor(Color.BLUE);
+        this.setBackgroundColor(backgroundColor);
     }
 
     @Override
@@ -84,8 +83,6 @@ public class TitleView extends View {
         //draw board
         drawBoard();
 
-        //draws win if there is one
-        drawWin();
 
     }
 
@@ -163,30 +160,5 @@ public class TitleView extends View {
     public void drawCircle(int y, int x, float radius){
         canvas.drawCircle(x * cellDim + cellDim / 2 + offsetX, y * cellDim + cellDim / 2 + offsetY, radius, paint);
     }
-    public void drawWin(){
-        if(this.winner){
-            //make string
-            String player;
-            String won = " Won";
-            //make path to draw along
-            Path path = new Path();
-            path.addCircle(columns / 2 * cellDim + 30, rows / 2 * cellDim + 100, 2 *  cellDim, Path.Direction.CW);
-            //modify paint
-            paint.setColor(Color.BLUE);
-            paint.setTextSize(cellDim/2);
-            paint.setFakeBoldText(true);
-            //not sure why this is flipped, seems like invalidate is not finishing false enough
-            if(true) {
-                player= "Player2";
-            }else{
-                player = "Player1";
-            }
-            //curved cool win, works on android dimensions off on nexus
-            //canvas.drawTextOnPath(player+won, path, 494, 0, paint);
-            //horizontal
-            canvas.drawText((player+won),columns/3*cellDim,rows/2*cellDim,paint);
-        }
-    }
-
 
 }

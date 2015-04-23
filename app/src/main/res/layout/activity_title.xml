@@ -10,12 +10,13 @@
     <csci448.connectfour.TitleView
         android:id="@+id/titleBackground"
         android:layout_width="fill_parent"
-        android:layout_height="0dp"  />
+        android:layout_height="fill_parent"  />
 
     <Button
         android:id="@+id/buttonSinglePlayer"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/buttonTwoPlayer"
         android:text="Single Player"
         android:onClick="singlePlayerClicked"/>
 
@@ -23,14 +24,14 @@
         android:id="@+id/buttonTwoPlayer"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/buttonSinglePlayer"
+        android:layout_above="@+id/buttonExit"
         android:text="Two Player"
         android:onClick="twoPlayerClicked"/>
     <Button
         android:id="@+id/buttonExit"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/buttonTwoPlayer"
+        android:layout_alignBottom="@id/titleBackground"
         android:text="Exit Game"
         android:onClick="exitClicked"/>
 

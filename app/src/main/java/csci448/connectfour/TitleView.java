@@ -16,14 +16,19 @@ public class TitleView extends View {
     private Paint paint = new Paint();
     private Context cont;
     private Canvas canvas;
-    private int boardWidth;
-    private int cellDim;
-    //game logic
-    private Logic logic;
-    //board dims
-    private int columns;
-    private int rows;
+    float boardWidth;
+    float cellDim;
 
+    //offset for board draw
+    private float offsetX;
+    private float offsetY;
+
+    //board dims
+    private int columns = 7;
+    private int rows = 6;
+
+    //resize board factor
+    private float factor = .75f;
     private boolean winner;
     //used for drawing a line through the winning set
     private WinType winType = WinType.NONE;
@@ -31,35 +36,26 @@ public class TitleView extends View {
     public TitleView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs);
         cont = context;
-        this.logic = new Logic();
-        this.columns = logic.getBoardColumns();
-        this.rows = logic.getBoardRows();
-        this.setBackgroundColor(Color.YELLOW);
+        this.setBackgroundColor(Color.BLUE);
     }
 
     public TitleView(Context context, AttributeSet attrs) {
         super(context, attrs);
         cont = context;
-        this.logic = new Logic();
-        this.columns = logic.getBoardColumns();
-        this.rows = logic.getBoardRows();
-        this.setBackgroundColor(Color.YELLOW);
+        this.setBackgroundColor(Color.BLUE);
     }
 
     public TitleView(Context context) {
         super(context);
         cont = context;
-        this.logic = new Logic();
-        this.columns = logic.getBoardColumns();
-        this.rows = logic.getBoardRows();
-        this.setBackgroundColor(Color.YELLOW);
+        this.setBackgroundColor(Color.BLUE);
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         int squareSize = getMeasuredWidth() * rows / columns;
-        setMeasuredDimension(getMeasuredWidth(), squareSize);
+        setMeasuredDimension(getMeasuredWidth(), getMeasuredHeight());
 
     }
 
@@ -70,13 +66,15 @@ public class TitleView extends View {
     public void onDraw(Canvas c) {
         this.canvas = c;
         if (canvas.getWidth() < canvas.getHeight()) {
-            this.cellDim = canvas.getWidth() / columns;
-            this.boardWidth = canvas.getWidth();
+            this.cellDim = (canvas.getWidth() / columns) * factor;
+            this.boardWidth = canvas.getWidth() * factor;
         } else {
-            this.cellDim = canvas.getHeight() / columns;
-            this.boardWidth = canvas.getHeight();
+            this.cellDim = (canvas.getHeight() / columns) * factor;
+            this.boardWidth = canvas.getHeight() * factor;
         }
-
+        //do this to move board on canvas
+        this.offsetX = cellDim * .75f;
+        this.offsetY = cellDim * 1.5f;
         //draw board
         drawBoard();
 
@@ -87,14 +85,12 @@ public class TitleView extends View {
 
     //Draws board
     public void drawBoard() {
-        //playing = true;
-        //listenerActivation();
-
+        System.out.println(cellDim);
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < columns; col++) {
                 //do this to adjust for board drawn from top down
                 int adjustedRow = rows - 1 - row;
-                drawSquare(adjustedRow, col, logic.getVal(row, col));
+                drawSquare(adjustedRow, col, GamePiece.BLANK);
             }
         }
     }
@@ -105,7 +101,7 @@ public class TitleView extends View {
         paint.setColor(Color.BLACK);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(2);
-        canvas.drawRect(x * cellDim, y * cellDim, (x + 1) * cellDim, (y + 1) * cellDim, paint);
+        canvas.drawRect(x * cellDim + offsetX, y * cellDim + offsetY, (x + 1) * cellDim + offsetX, (y + 1) * cellDim + offsetY, paint);
 
         //draw pieces
         switch (identity) {
@@ -126,7 +122,7 @@ public class TitleView extends View {
                 break;
         }
         paint.setStyle(Paint.Style.FILL);
-        canvas.drawCircle(x * cellDim + cellDim / 2, y * cellDim + cellDim / 2, cellDim / 2 - 4, paint);
+        canvas.drawCircle(x * cellDim + cellDim / 2 + offsetX, y * cellDim + cellDim / 2 + offsetY, cellDim / 2 - 4, paint);
 
 
     }
@@ -143,7 +139,7 @@ public class TitleView extends View {
             paint.setTextSize(cellDim/2);
             paint.setFakeBoldText(true);
             //not sure why this is flipped, seems like invalidate is not finishing false enough
-            if(logic.isP1Turn()) {
+            if(true) {
                 player= "Player2";
             }else{
                 player = "Player1";

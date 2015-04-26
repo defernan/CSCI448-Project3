@@ -245,7 +245,7 @@ public class BoardView extends View {
 
         return false;
     }
-    public void newGame(){
+    public void newGame(int gameType){
         logic.initializeGame();
         this.winner = false;
         invalidate();

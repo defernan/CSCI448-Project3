@@ -31,6 +31,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/buttonNewGame"
         android:text="Exit Game"
-        android:onClick="exitClicked"/>
+        android:onClick="exitCurrentClicked"/>
 
 </RelativeLayout>

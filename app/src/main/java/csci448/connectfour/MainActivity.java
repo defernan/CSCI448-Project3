@@ -1,5 +1,7 @@
 package csci448.connectfour;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -7,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -14,6 +17,7 @@ public class MainActivity extends ActionBarActivity {
     Button newGame;
     Button exitGame;
     int gameType;
+    AlertDialog newGameDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,8 +27,32 @@ public class MainActivity extends ActionBarActivity {
         boardView = (BoardView)findViewById(R.id.board);
         newGame = (Button) findViewById(R.id.buttonNewGame);
         exitGame = (Button) findViewById(R.id.buttonExitGame);
+        final TextView playerString = (TextView) findViewById(R.id.player);
         Bundle b = getIntent().getExtras();
         gameType = b.getInt("gameType");
+        boardView.newGame(gameType);
+        if (gameType == 0) {
+            playerString.setText("Player vs Player");
+        }
+        else if (gameType == 1) {
+            playerString.setText("Player vs Computer");
+        }
+
+        newGameDialog = new AlertDialog.Builder(this).create(); // dialog for new game
+        newGameDialog.setTitle("New Game");
+        newGameDialog.setMessage("Who would you like to play against?");
+        newGameDialog.setButton("Person", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                boardView.newGame(0); //initializes new game with another player
+                playerString.setText("Player vs Player");
+            }
+        });
+        newGameDialog.setButton2("Computer", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                boardView.newGame(1); //initializes new game with computer
+                playerString.setText("Player vs Computer");
+            }
+        });
     }
 
 
@@ -50,10 +78,10 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
     public void newClicked(View view) {
-        boardView.newGame();
+        newGameDialog.show();
     }
 
-    public void exitClicked(View view) {
+    public void exitCurrentClicked(View view) {
 //        finish();
 //        System.exit(0);//closes app
         startActivity(new Intent(MainActivity.this, TitleActivity.class));

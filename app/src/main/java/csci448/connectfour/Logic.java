@@ -320,9 +320,8 @@ public class Logic {
     }
     //computer player logic
     public void computerNextMove(int lastPlayerColumn) {
-        System.out.println("Computer Move");
-        boolean madeMove = false;
         changeTurn();
+        //variables for checking if player has any pieces in a row from last move
         int left = 1 + checkLeft(lastRow, lastPlayerColumn - 1);
         int right = 1 + checkRight(lastRow, lastPlayerColumn + 1);
         int horizontal = left + right - 1;
@@ -334,6 +333,7 @@ public class Logic {
         int upLeft = 1 + checkUpLeft(lastRow + 1, lastPlayerColumn - 1);
         int diagDown = downRight + upLeft - 1;
         changeTurn();
+        //variables for checking if computer has any pieces in a row from last move
         int compLeft = 1 + checkLeft(lastCompRow, lastCompCol - 1);
         int compRight = 1 + checkRight(lastCompRow, lastCompCol + 1);
         int compHorizontal = compLeft + compRight - 1;

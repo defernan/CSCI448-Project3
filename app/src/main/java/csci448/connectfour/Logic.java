@@ -3,6 +3,8 @@ package csci448.connectfour;
 import android.util.Log;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 /**
  * Created by Dezmon on 4/15/15.
  */
@@ -24,6 +26,8 @@ public class Logic {
     GamePiece winPiece;
     //number of turns
     private int turns = 0;
+    //list of computers next blocking move
+    ArrayList<Cell> compMovesList = new ArrayList<Cell>();
     //private ArrayList<Pair> winningPieces;
     public Logic(){
         this.rows = 6;
@@ -39,6 +43,7 @@ public class Logic {
         }
         p1Turn = true;
         turns = 0;
+        compMovesList = new ArrayList<Cell>();
     }
 
     public void changeTurn(){
@@ -311,6 +316,8 @@ public class Logic {
     }
     //computer player logic
     public void computerNextMove(int lastPlayerColumn) {
+        System.out.println("Computer Move");
+        boolean madeMove = false;
         changeTurn();
         int left = 1 + checkLeft(lastRow, lastPlayerColumn - 1);
         int right = 1 + checkRight(lastRow, lastPlayerColumn + 1);
@@ -344,40 +351,59 @@ public class Logic {
             return;
         }
 
+
         if (left == 3) {
             if ((lastPlayerColumn != 6) && (board[lastRow][lastPlayerColumn + 1] == GamePiece.BLANK)) {
-                if ((lastRow > 0) && (board[lastRow - 1][lastPlayerColumn + 1] != GamePiece.BLANK)) {
-                    markCell(lastPlayerColumn + 1);
-                    return;
-                }
-                else if ((lastRow == 0)) {
-                    markCell(lastPlayerColumn + 1);
-                    return;
-                }
-
+                compMovesList.add(new Cell(lastRow, lastPlayerColumn + 1));
             }
         }
         if (right == 3) {
             if ((lastPlayerColumn != 0) && (board[lastRow][lastPlayerColumn - 1] == GamePiece.BLANK)) {
-                if ((lastRow > 0) && (board[lastRow - 1][lastPlayerColumn - 1] != GamePiece.BLANK)) {
-                    markCell(lastPlayerColumn - 1);
-                    return;
-                }
-                else if ((lastRow == 0)) {
-                    markCell(lastPlayerColumn - 1);
-                    return;
-                }
-
+                compMovesList.add(new Cell(lastRow, lastPlayerColumn - 1));
             }
         }
         if (down == 3) {
             if ((lastRow != rows - 1) && (board[lastRow + 1][lastPlayerColumn] == GamePiece.BLANK)) {
-                markCell(lastPlayerColumn);
-                return;
+                compMovesList.add(new Cell(lastRow + 1, lastPlayerColumn));
             }
         }
+        if (downLeft == 3) {
+            System.out.println("downLeft");
+            if ((lastPlayerColumn != 6) && (lastRow != rows -1) && (board[lastRow + 1][lastPlayerColumn + 1] == GamePiece.BLANK)) {
+                compMovesList.add(new Cell(lastRow + 1, lastPlayerColumn + 1));
+            }
+        }
+        if (downRight == 3) {
+            if ((lastPlayerColumn != 0) && (lastRow != rows -1) && (board[lastRow + 1][lastPlayerColumn - 1] == GamePiece.BLANK)) {
+                if (board[lastRow][lastPlayerColumn - 1] != GamePiece.BLANK) {
+                    compMovesList.add(new Cell(lastRow - 1, lastPlayerColumn - 1));
+                }
+            }
+        }
+        if (upLeft == 3) {
+            if ((lastPlayerColumn != 6) && (lastRow != 0) && (board[lastRow - 1][lastPlayerColumn + 1] == GamePiece.BLANK)) {
+                    compMovesList.add(new Cell(lastRow - 1, lastPlayerColumn + 1));
+            }
+        }
+        if (upRight == 3) {
+            if ((lastPlayerColumn != 0) && (lastRow != 0) && (board[lastRow - 1][lastPlayerColumn - 1] == GamePiece.BLANK)) {
 
-        for(int row = 0; row < rows; row++) {
+                compMovesList.add(new Cell(lastRow - 1, lastPlayerColumn - 1));
+
+            }
+        }
+        if (!compMovesList.isEmpty()) {
+            for (Cell c : compMovesList) {
+                System.out.println("list hit");
+                if ((board[c.getRow()][c.getCol()] == GamePiece.BLANK) && (board[c.getRow() - 1][c.getCol()] != GamePiece.BLANK)) {
+                    System.out.println("preparing to mark cell");
+                    markCell(c.getCol());
+                    compMovesList.remove(c);
+                    return;
+                }
+            }
+        }
+        for (int row = 0; row < rows; row++) {
             for (int col = 0; col < columns; col++) {
                 if (board[row][col] == GamePiece.BLANK) {
                     markCell(col);
@@ -385,7 +411,6 @@ public class Logic {
                 }
             }
         }
-
     }
     //getters and setters
     public GamePiece getVal(int row, int col){

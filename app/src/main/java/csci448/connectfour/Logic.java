@@ -1,8 +1,5 @@
 package csci448.connectfour;
 
-import android.util.Log;
-import android.widget.TextView;
-
 import java.util.ArrayList;
 
 /**
@@ -27,7 +24,9 @@ public class Logic {
     //number of turns
     private int turns = 0;
     //list of computers next blocking move
-    private ArrayList<Cell> compMovesList = new ArrayList<Cell>();
+    private ArrayList<Cell> compBlockList = new ArrayList<Cell>();
+    //list of computers winning moves
+    private ArrayList<Cell> compWinList = new ArrayList<Cell>();
     //private ArrayList<Pair> winningPieces;
     public Logic(){
         this.rows = 6;
@@ -43,7 +42,8 @@ public class Logic {
         }
         p1Turn = true;
         turns = 0;
-        compMovesList = new ArrayList<Cell>();
+        compBlockList = new ArrayList<Cell>();
+        compWinList = new ArrayList<Cell>();
     }
 
     public void changeTurn(){
@@ -62,6 +62,10 @@ public class Logic {
                 board[row][col] = playerPiece();
                 this.lastRow = row;
                 turns += 1;
+                if (!p1Turn) {
+                    lastCompCol = col;
+                    lastCompRow = row;
+                }
                 return;
             }
         }
@@ -330,15 +334,15 @@ public class Logic {
         int upLeft = 1 + checkUpLeft(lastRow + 1, lastPlayerColumn - 1);
         int diagDown = downRight + upLeft - 1;
         changeTurn();
-        int compLeft = 1 + checkLeft(lastRow, lastPlayerColumn - 1);
-        int compRight = 1 + checkRight(lastRow, lastPlayerColumn + 1);
+        int compLeft = 1 + checkLeft(lastCompRow, lastCompCol - 1);
+        int compRight = 1 + checkRight(lastCompRow, lastCompCol + 1);
         int compHorizontal = compLeft + compRight - 1;
-        int compDown = 1+ checkDown(lastRow - 1, lastPlayerColumn);
-        int compDownLeft = 1 + checkDownLeft(lastRow - 1, lastPlayerColumn - 1);
-        int compUpRight = 1 + checkUpRight(lastRow + 1, lastPlayerColumn + 1);
+        int compDown = 1+ checkDown(lastCompRow - 1, lastCompCol);
+        int compDownLeft = 1 + checkDownLeft(lastCompRow - 1, lastCompCol - 1);
+        int compUpRight = 1 + checkUpRight(lastCompRow + 1, lastCompCol + 1);
         int compDiagUp = compDownLeft + compUpRight - 1;
-        int compDownRight = 1 + checkDownRight(lastRow - 1, lastPlayerColumn + 1);
-        int compUpLeft = 1 + checkUpLeft(lastRow + 1, lastPlayerColumn - 1);
+        int compDownRight = 1 + checkDownRight(lastCompRow - 1, lastCompCol + 1);
+        int compUpLeft = 1 + checkUpLeft(lastCompRow + 1, lastCompCol - 1);
         int compDiagDown = compDownRight + compUpLeft - 1;
 
         if (turns <= 1) {
@@ -351,51 +355,141 @@ public class Logic {
             return;
         }
 
+        //Computer Logic to win
+        if (compLeft == 3) {
+            if ((lastCompCol != columns - 1) && (board[lastCompRow][lastCompCol + 1] == GamePiece.BLANK)) {
+                compWinList.add(new Cell(lastCompRow, lastCompCol + 1));
+            }
+        }
+        if (compRight == 3) {
+            if ((lastCompCol != 0) && (board[lastCompRow][lastCompCol - 1] == GamePiece.BLANK)) {
+                compWinList.add(new Cell(lastCompRow, lastCompCol - 1));
+            }
+        }
+        if (compDown == 3) {
+            if ((lastCompRow != rows - 1) && (board[lastCompRow][lastCompCol + 1] == GamePiece.BLANK)) {
+                compWinList.add(new Cell(lastCompRow + 1, lastCompCol));
+            }
+        }
+        if (compDownLeft == 3) {
+            if ((lastCompCol != columns - 1) && (lastCompRow != rows - 1) && (board[lastCompRow + 1][lastCompCol + 1] == GamePiece.BLANK)) {
+                compWinList.add(new Cell(lastCompRow + 1, lastCompCol + 1));
+            }
+        }
+        if (compDownRight == 3) {
+            if ((lastCompCol != 0) && (lastCompRow != rows - 1) && (board[lastCompRow + 1][lastCompCol - 1] == GamePiece.BLANK)) {
+                compWinList.add(new Cell(lastCompRow + 1, lastCompCol - 1));
+            }
+        }
+        if (compUpLeft == 3) {
+            if ((lastCompCol != columns - 1) && (lastCompRow != 0) && (board[lastCompRow - 1][lastCompCol + 1] == GamePiece.BLANK)) {
+                compWinList.add(new Cell(lastCompRow - 1, lastCompCol + 1));
+            }
+        }
+        if (compUpRight == 3) {
+            if ((lastCompCol != 0) && (lastCompRow != 0) && (board[lastCompRow - 1][lastCompCol - 1] == GamePiece.BLANK)) {
+                compWinList.add(new Cell(lastCompRow - 1, lastCompCol - 1));
+            }
+        }
+        if (!compWinList.isEmpty()) {
+            for (Cell c : compWinList) {
+                if ((board[c.getRow()][c.getCol()] == GamePiece.BLANK) && (c.getRow() != 0) && (board[c.getRow() - 1][c.getCol()] != GamePiece.BLANK)) {
+                    markCell(c.getCol());
+                    compWinList.remove(c);
+                    return;
+                }
+            }
+        }
+
         //Computer Logic to block 3 in a row
         if (left == 3) {
-            if ((lastPlayerColumn != 6) && (board[lastRow][lastPlayerColumn + 1] == GamePiece.BLANK)) {
-                compMovesList.add(new Cell(lastRow, lastPlayerColumn + 1));
+            if ((lastPlayerColumn != columns - 1) && (board[lastRow][lastPlayerColumn + 1] == GamePiece.BLANK)) {
+                compBlockList.add(new Cell(lastRow, lastPlayerColumn + 1));
             }
         }
         if (right == 3) {
             if ((lastPlayerColumn != 0) && (board[lastRow][lastPlayerColumn - 1] == GamePiece.BLANK)) {
-                compMovesList.add(new Cell(lastRow, lastPlayerColumn - 1));
+                compBlockList.add(new Cell(lastRow, lastPlayerColumn - 1));
             }
         }
         if (down == 3) {
             if ((lastRow != rows - 1) && (board[lastRow + 1][lastPlayerColumn] == GamePiece.BLANK)) {
-                compMovesList.add(new Cell(lastRow + 1, lastPlayerColumn));
+                compBlockList.add(new Cell(lastRow + 1, lastPlayerColumn));
             }
         }
         if (downLeft == 3) {
-            if ((lastPlayerColumn != 6) && (lastRow != rows -1) && (board[lastRow + 1][lastPlayerColumn + 1] == GamePiece.BLANK)) {
-                compMovesList.add(new Cell(lastRow + 1, lastPlayerColumn + 1));
+            if ((lastPlayerColumn != columns - 1) && (lastRow != rows -1) && (board[lastRow + 1][lastPlayerColumn + 1] == GamePiece.BLANK)) {
+                compBlockList.add(new Cell(lastRow + 1, lastPlayerColumn + 1));
             }
         }
         if (downRight == 3) {
             if ((lastPlayerColumn != 0) && (lastRow != rows -1) && (board[lastRow + 1][lastPlayerColumn - 1] == GamePiece.BLANK)) {
-                if (board[lastRow][lastPlayerColumn - 1] != GamePiece.BLANK) {
-                    compMovesList.add(new Cell(lastRow - 1, lastPlayerColumn - 1));
-                }
+                compBlockList.add(new Cell(lastRow - 1, lastPlayerColumn - 1));
+
             }
         }
         if (upLeft == 3) {
             if ((lastPlayerColumn != 6) && (lastRow != 0) && (board[lastRow - 1][lastPlayerColumn + 1] == GamePiece.BLANK)) {
-                    compMovesList.add(new Cell(lastRow - 1, lastPlayerColumn + 1));
+                compBlockList.add(new Cell(lastRow - 1, lastPlayerColumn + 1));
             }
         }
         if (upRight == 3) {
             if ((lastPlayerColumn != 0) && (lastRow != 0) && (board[lastRow - 1][lastPlayerColumn - 1] == GamePiece.BLANK)) {
-
-                compMovesList.add(new Cell(lastRow - 1, lastPlayerColumn - 1));
-
+                compBlockList.add(new Cell(lastRow - 1, lastPlayerColumn - 1));
             }
         }
-        if (!compMovesList.isEmpty()) {
-            for (Cell c : compMovesList) {
-                if ((board[c.getRow()][c.getCol()] == GamePiece.BLANK) && (board[c.getRow() - 1][c.getCol()] != GamePiece.BLANK)) {
+        if (!compBlockList.isEmpty()) {
+            for (Cell c : compBlockList) {
+                if ((board[c.getRow()][c.getCol()] == GamePiece.BLANK) && (c.getRow() != 0) && (board[c.getRow() - 1][c.getCol()] != GamePiece.BLANK)) {
                     markCell(c.getCol());
-                    compMovesList.remove(c);
+                    compBlockList.remove(c);
+                    return;
+                }
+            }
+        }
+
+        //Computer Logic to get to 3 in a row
+        ArrayList<Cell> tempWinList = new ArrayList<Cell>();
+        if (compLeft == 2) {
+            if ((lastCompCol != columns - 1) && (board[lastCompRow][lastCompCol + 1] == GamePiece.BLANK)) {
+                tempWinList.add(new Cell(lastCompRow, lastCompCol + 1));
+            }
+        }
+        if (compRight == 2) {
+            if ((lastCompCol != 0) && (board[lastCompRow][lastCompCol - 1] == GamePiece.BLANK)) {
+                tempWinList.add(new Cell(lastCompRow, lastCompCol - 1));
+            }
+        }
+        if (compDown == 2) {
+            if ((lastCompRow != rows - 1) && (board[lastCompRow][lastCompCol + 1] == GamePiece.BLANK)) {
+                tempWinList.add(new Cell(lastCompRow + 1, lastCompCol));
+            }
+        }
+        if (compDownLeft == 2) {
+            if ((lastCompCol != columns - 1) && (lastCompRow != rows - 1) && (board[lastCompRow + 1][lastCompCol + 1] == GamePiece.BLANK)) {
+                tempWinList.add(new Cell(lastCompRow + 1, lastCompCol + 1));
+            }
+        }
+        if (compDownRight == 2) {
+            if ((lastCompCol != 0) && (lastCompRow != rows - 1) && (board[lastCompRow + 1][lastCompCol - 1] == GamePiece.BLANK)) {
+                tempWinList.add(new Cell(lastCompRow + 1, lastCompCol - 1));
+            }
+        }
+        if (compUpLeft == 2) {
+            if ((lastCompCol != columns - 1) && (lastCompRow != 0) && (board[lastCompRow - 1][lastCompCol + 1] == GamePiece.BLANK)) {
+                tempWinList.add(new Cell(lastCompRow - 1, lastCompCol + 1));
+            }
+        }
+        if (compUpRight == 2) {
+            if ((lastCompCol != 0) && (lastCompRow != 0) && (board[lastCompRow - 1][lastCompCol - 1] == GamePiece.BLANK)) {
+                tempWinList.add(new Cell(lastCompRow - 1, lastCompCol - 1));
+            }
+        }
+        if (!tempWinList.isEmpty()) {
+            for (Cell c : tempWinList) {
+                if ((board[c.getRow()][c.getCol()] == GamePiece.BLANK) && (c.getRow() != 0) && (board[c.getRow() - 1][c.getCol()] != GamePiece.BLANK)) {
+                    markCell(c.getCol());
+                    tempWinList.remove(c);
                     return;
                 }
             }
@@ -444,7 +538,7 @@ public class Logic {
         }
         if (!tempMovesList.isEmpty()) {
             for (Cell c : tempMovesList) {
-                if ((board[c.getRow()][c.getCol()] == GamePiece.BLANK) && (board[c.getRow() - 1][c.getCol()] != GamePiece.BLANK)) {
+                if ((board[c.getRow()][c.getCol()] == GamePiece.BLANK) && (c.getRow() != 0) && (board[c.getRow() - 1][c.getCol()] != GamePiece.BLANK)) {
                     markCell(c.getCol());
                     tempMovesList.remove(c);
                     return;

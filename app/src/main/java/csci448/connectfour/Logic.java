@@ -12,12 +12,18 @@ public class Logic {
     private int columns;
     //keeps track of last row where piece was placed
     private int lastRow;
+    private int lastCol;
+    //keeps track of the computers last move
+    private int lastCompRow;
+    private int lastCompCol;
     //board
     private GamePiece board[][];
     //turn tracker
     private boolean p1Turn;
     //Gamepiece win tracker
     GamePiece winPiece;
+    //number of turns
+    private int turns = 0;
     //private ArrayList<Pair> winningPieces;
     public Logic(){
         this.rows = 6;
@@ -49,6 +55,7 @@ public class Logic {
             if(board[row][col] == GamePiece.BLANK){
                 board[row][col] = playerPiece();
                 this.lastRow = row;
+                turns += 1;
                 return;
             }
         }
@@ -301,6 +308,39 @@ public class Logic {
             markWinUpRight(row + 1, col + 1);
         }
     }
+    //computer player logic
+    public void computerNextMove(int lastPlayerColumn) {
+        int left = 1 + checkLeft(lastRow, lastPlayerColumn - 1);
+        int right = checkRight(lastRow, lastPlayerColumn + 1);
+        int horizontal = left + right - 1;
+        int down = checkDown(lastRow - 1, lastPlayerColumn);
+        int downLeft = 1 + checkDownLeft(lastRow - 1, lastPlayerColumn - 1);
+        int upRight = checkUpRight(lastRow + 1, lastPlayerColumn + 1);
+        int diagUp = downLeft + upRight - 1;
+        int downRight = 1 + checkDownRight(lastRow - 1, lastPlayerColumn + 1);
+        int upLeft = checkUpLeft(lastRow + 1, lastPlayerColumn - 1);
+        int diagDown = downRight + upLeft - 1;
+
+        if (turns <= 1) {
+            if (columns - lastPlayerColumn > 3) {
+                markCell(lastPlayerColumn + 1);
+            }
+            else {
+                markCell(lastPlayerColumn - 1);
+            }
+            return;
+        }
+
+        for(int row = 0; row < rows; row++) {
+            for (int col = 0; col < columns; col++) {
+                if (board[row][col] == GamePiece.BLANK) {
+                    markCell(col);
+                    return;
+                }
+            }
+        }
+
+    }
     //getters and setters
     public GamePiece getVal(int row, int col){
         return board[row][col];
@@ -318,5 +358,10 @@ public class Logic {
     public int getBoardColumns(){
         return this.columns;
     }
-
+    public int getLastCompRow() {
+        return lastCompRow;
+    }
+    public int getLastCompCol() {
+        return lastCompCol;
+    }
 }

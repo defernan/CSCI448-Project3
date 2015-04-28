@@ -27,6 +27,7 @@ public class BoardView extends View {
     private boolean winner;
     //used for drawing a line through the winning set
     private WinType winType = WinType.NONE;
+    int gameType = 0;
 
     public BoardView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs);
@@ -192,50 +193,14 @@ public class BoardView extends View {
                     logic.markCell(col);
 
                     winner = logic.checkForWinner(col);
-                    /*
-                    if (!(winner) && (compPlayer)) {
-                        logic.computerNextMove(x / cellDim, y / cellDim);
-                        winner = logic.checkForWinner(logic.getCompLastX(), logic.getCompLastY(), 0);
-                        turn += 1;
-                    }
-
-
-                    //TextView playerString = (TextView) findViewById(R.id.player);
-                    //if (p1turn) {
-                    //   playerString.setText("Player 1");
-                    //}
-                    //else {
-                    //   playerString.setText("Player 2");
-                    //}
-
-                    if ((turn == 9) && (logic.getWinType() == WinType.DRAW)) {
-                        winType = WinType.DRAW;
-                    }
-                    else {
-                        winType = logic.getWinType();
-                    }
-
-                    if (winner) {
-                        numGames += 1;
-                        switch(logic.getMark()){
-                            case X:
-                                player1Wins += 1;
-                                break;
-                            case O:
-                                if (compPlayer) {
-                                    compWins += 1;
-                                }
-                                else {
-                                    player2Wins += 1;
-                                }
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                    */
                     invalidate();
                     logic.changeTurn();
+                    if (!(winner) && (gameType == 1)) {
+                        logic.computerNextMove(col);
+                        winner = logic.checkForWinner(logic.getLastCompCol());
+                        invalidate();
+                        logic.changeTurn();
+                    }
                     return true;
                 }
             }
@@ -248,6 +213,7 @@ public class BoardView extends View {
     public void newGame(int gameType){
         logic.initializeGame();
         this.winner = false;
+        this.gameType = gameType;
         invalidate();
     }
 }

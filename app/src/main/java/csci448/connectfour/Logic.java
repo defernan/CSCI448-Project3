@@ -38,6 +38,7 @@ public class Logic {
                 board[row][col]=GamePiece.BLANK;
         }
         p1Turn = true;
+        turns = 0;
     }
 
     public void changeTurn(){
@@ -310,16 +311,28 @@ public class Logic {
     }
     //computer player logic
     public void computerNextMove(int lastPlayerColumn) {
+        changeTurn();
         int left = 1 + checkLeft(lastRow, lastPlayerColumn - 1);
-        int right = checkRight(lastRow, lastPlayerColumn + 1);
+        int right = 1 + checkRight(lastRow, lastPlayerColumn + 1);
         int horizontal = left + right - 1;
-        int down = checkDown(lastRow - 1, lastPlayerColumn);
+        int down = 1 + checkDown(lastRow - 1, lastPlayerColumn);
         int downLeft = 1 + checkDownLeft(lastRow - 1, lastPlayerColumn - 1);
-        int upRight = checkUpRight(lastRow + 1, lastPlayerColumn + 1);
+        int upRight = 1 + checkUpRight(lastRow + 1, lastPlayerColumn + 1);
         int diagUp = downLeft + upRight - 1;
         int downRight = 1 + checkDownRight(lastRow - 1, lastPlayerColumn + 1);
-        int upLeft = checkUpLeft(lastRow + 1, lastPlayerColumn - 1);
+        int upLeft = 1 + checkUpLeft(lastRow + 1, lastPlayerColumn - 1);
         int diagDown = downRight + upLeft - 1;
+        changeTurn();
+        int compLeft = 1 + checkLeft(lastRow, lastPlayerColumn - 1);
+        int compRight = 1 + checkRight(lastRow, lastPlayerColumn + 1);
+        int compHorizontal = compLeft + compRight - 1;
+        int compDown = 1+ checkDown(lastRow - 1, lastPlayerColumn);
+        int compDownLeft = 1 + checkDownLeft(lastRow - 1, lastPlayerColumn - 1);
+        int compUpRight = 1 + checkUpRight(lastRow + 1, lastPlayerColumn + 1);
+        int compDiagUp = compDownLeft + compUpRight - 1;
+        int compDownRight = 1 + checkDownRight(lastRow - 1, lastPlayerColumn + 1);
+        int compUpLeft = 1 + checkUpLeft(lastRow + 1, lastPlayerColumn - 1);
+        int compDiagDown = compDownRight + compUpLeft - 1;
 
         if (turns <= 1) {
             if (columns - lastPlayerColumn > 3) {
@@ -329,6 +342,39 @@ public class Logic {
                 markCell(lastPlayerColumn - 1);
             }
             return;
+        }
+
+        if (left == 3) {
+            if ((lastPlayerColumn != 6) && (board[lastRow][lastPlayerColumn + 1] == GamePiece.BLANK)) {
+                if ((lastRow > 0) && (board[lastRow - 1][lastPlayerColumn + 1] != GamePiece.BLANK)) {
+                    markCell(lastPlayerColumn + 1);
+                    return;
+                }
+                else if ((lastRow == 0)) {
+                    markCell(lastPlayerColumn + 1);
+                    return;
+                }
+
+            }
+        }
+        if (right == 3) {
+            if ((lastPlayerColumn != 0) && (board[lastRow][lastPlayerColumn - 1] == GamePiece.BLANK)) {
+                if ((lastRow > 0) && (board[lastRow - 1][lastPlayerColumn - 1] != GamePiece.BLANK)) {
+                    markCell(lastPlayerColumn - 1);
+                    return;
+                }
+                else if ((lastRow == 0)) {
+                    markCell(lastPlayerColumn - 1);
+                    return;
+                }
+
+            }
+        }
+        if (down == 3) {
+            if ((lastRow != rows - 1) && (board[lastRow + 1][lastPlayerColumn] == GamePiece.BLANK)) {
+                markCell(lastPlayerColumn);
+                return;
+            }
         }
 
         for(int row = 0; row < rows; row++) {

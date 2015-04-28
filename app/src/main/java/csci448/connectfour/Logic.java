@@ -27,7 +27,7 @@ public class Logic {
     //number of turns
     private int turns = 0;
     //list of computers next blocking move
-    ArrayList<Cell> compMovesList = new ArrayList<Cell>();
+    private ArrayList<Cell> compMovesList = new ArrayList<Cell>();
     //private ArrayList<Pair> winningPieces;
     public Logic(){
         this.rows = 6;
@@ -351,7 +351,7 @@ public class Logic {
             return;
         }
 
-
+        //Computer Logic to block 3 in a row
         if (left == 3) {
             if ((lastPlayerColumn != 6) && (board[lastRow][lastPlayerColumn + 1] == GamePiece.BLANK)) {
                 compMovesList.add(new Cell(lastRow, lastPlayerColumn + 1));
@@ -368,7 +368,6 @@ public class Logic {
             }
         }
         if (downLeft == 3) {
-            System.out.println("downLeft");
             if ((lastPlayerColumn != 6) && (lastRow != rows -1) && (board[lastRow + 1][lastPlayerColumn + 1] == GamePiece.BLANK)) {
                 compMovesList.add(new Cell(lastRow + 1, lastPlayerColumn + 1));
             }
@@ -394,15 +393,66 @@ public class Logic {
         }
         if (!compMovesList.isEmpty()) {
             for (Cell c : compMovesList) {
-                System.out.println("list hit");
                 if ((board[c.getRow()][c.getCol()] == GamePiece.BLANK) && (board[c.getRow() - 1][c.getCol()] != GamePiece.BLANK)) {
-                    System.out.println("preparing to mark cell");
                     markCell(c.getCol());
                     compMovesList.remove(c);
                     return;
                 }
             }
         }
+
+        //Computer Logic to block 2 in a row
+//        ArrayList<Cell> tempMovesList = new ArrayList<Cell>();
+//        if (left == 2) {
+//            if ((lastPlayerColumn != 6) && (board[lastRow][lastPlayerColumn + 1] == GamePiece.BLANK)) {
+//                compMovesList.add(new Cell(lastRow, lastPlayerColumn + 1));
+//            }
+//        }
+//        if (right == 2) {
+//            if ((lastPlayerColumn != 0) && (board[lastRow][lastPlayerColumn - 1] == GamePiece.BLANK)) {
+//                compMovesList.add(new Cell(lastRow, lastPlayerColumn - 1));
+//            }
+//        }
+//        if (down == 2) {
+//            if ((lastRow != rows - 1) && (board[lastRow + 1][lastPlayerColumn] == GamePiece.BLANK)) {
+//                compMovesList.add(new Cell(lastRow + 1, lastPlayerColumn));
+//            }
+//        }
+//        if (downLeft == 2) {
+//            if ((lastPlayerColumn != 6) && (lastRow != rows -1) && (board[lastRow + 1][lastPlayerColumn + 1] == GamePiece.BLANK)) {
+//                compMovesList.add(new Cell(lastRow + 1, lastPlayerColumn + 1));
+//            }
+//        }
+//        if (downRight == 2) {
+//            if ((lastPlayerColumn != 0) && (lastRow != rows -1) && (board[lastRow + 1][lastPlayerColumn - 1] == GamePiece.BLANK)) {
+//                if (board[lastRow][lastPlayerColumn - 1] != GamePiece.BLANK) {
+//                    compMovesList.add(new Cell(lastRow - 1, lastPlayerColumn - 1));
+//                }
+//            }
+//        }
+//        if (upLeft == 2) {
+//            if ((lastPlayerColumn != 6) && (lastRow != 0) && (board[lastRow - 1][lastPlayerColumn + 1] == GamePiece.BLANK)) {
+//                compMovesList.add(new Cell(lastRow - 1, lastPlayerColumn + 1));
+//            }
+//        }
+//        if (upRight == 2) {
+//            if ((lastPlayerColumn != 0) && (lastRow != 0) && (board[lastRow - 1][lastPlayerColumn - 1] == GamePiece.BLANK)) {
+//
+//                compMovesList.add(new Cell(lastRow - 1, lastPlayerColumn - 1));
+//
+//            }
+//        }
+//        if (!tempMovesList.isEmpty()) {
+//            for (Cell c : tempMovesList) {
+//                if ((board[c.getRow()][c.getCol()] == GamePiece.BLANK) && (board[c.getRow() - 1][c.getCol()] != GamePiece.BLANK)) {
+//                    markCell(c.getCol());
+//                    tempMovesList.remove(c);
+//                    return;
+//                }
+//            }
+//        }
+
+        //If there are no good moves this hits at the end to place the piece
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < columns; col++) {
                 if (board[row][col] == GamePiece.BLANK) {

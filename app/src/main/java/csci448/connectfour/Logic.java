@@ -367,7 +367,7 @@ public class Logic {
             }
         }
         if (compDown == 3) {
-            if ((lastCompRow != rows - 1) && (board[lastCompRow][lastCompCol + 1] == GamePiece.BLANK)) {
+            if ((lastCompRow != rows - 1) && (board[lastCompRow + 1][lastCompCol] == GamePiece.BLANK)) {
                 compWinList.add(new Cell(lastCompRow + 1, lastCompCol));
             }
         }
@@ -429,7 +429,7 @@ public class Logic {
             }
         }
         if (upLeft == 3) {
-            if ((lastPlayerColumn != 6) && (lastRow != 0) && (board[lastRow - 1][lastPlayerColumn + 1] == GamePiece.BLANK)) {
+            if ((lastPlayerColumn != columns - 1) && (lastRow != 0) && (board[lastRow - 1][lastPlayerColumn + 1] == GamePiece.BLANK)) {
                 compBlockList.add(new Cell(lastRow - 1, lastPlayerColumn + 1));
             }
         }
@@ -461,7 +461,7 @@ public class Logic {
             }
         }
         if (compDown == 2) {
-            if ((lastCompRow != rows - 1) && (board[lastCompRow][lastCompCol + 1] == GamePiece.BLANK)) {
+            if ((lastCompRow != rows - 1) && (board[lastCompRow + 1][lastCompCol] == GamePiece.BLANK)) {
                 tempWinList.add(new Cell(lastCompRow + 1, lastCompCol));
             }
         }
@@ -525,7 +525,7 @@ public class Logic {
             }
         }
         if (upLeft == 2) {
-            if ((lastPlayerColumn != 6) && (lastRow != 0) && (board[lastRow - 1][lastPlayerColumn + 1] == GamePiece.BLANK)) {
+            if ((lastPlayerColumn != columns - 1) && (lastRow != 0) && (board[lastRow - 1][lastPlayerColumn + 1] == GamePiece.BLANK)) {
                 tempMovesList.add(new Cell(lastRow - 1, lastPlayerColumn + 1));
             }
         }
